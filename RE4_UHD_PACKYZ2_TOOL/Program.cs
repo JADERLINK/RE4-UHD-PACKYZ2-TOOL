@@ -11,10 +11,17 @@ namespace PACKYZ2_TOOL
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("### JADERLINK PACKYZ2 TOOL ###");
-            Console.WriteLine("### VERSION 1.0.0.0        ###");
+            Console.WriteLine("# JADERLINK PACKYZ2 TOOL");
+            Console.WriteLine("# VERSION 1.0.1");
 
-            if (args.Length >= 1)
+            if (args.Length == 0)
+            {
+                Console.WriteLine("For more information read:");
+                Console.WriteLine("https://github.com/JADERLINK/RE4-UHD-PACKYZ2-TOOL");
+                Console.WriteLine("Press any key to close the console.");
+                Console.ReadKey();
+            }
+            else if (args.Length >= 1 && File.Exists(args[0]))
             {
                 string file = args[0];
                 FileInfo info = null;
@@ -25,7 +32,7 @@ namespace PACKYZ2_TOOL
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error in the directory: " + Environment.NewLine + ex);
+                    Console.WriteLine("Error in the path: " + Environment.NewLine + ex);
                 }
                 if (info != null)
                 {
@@ -41,7 +48,7 @@ namespace PACKYZ2_TOOL
                             }
                             catch (Exception ex)
                             {
-                                Console.WriteLine("Error: " + ex);
+                                Console.WriteLine("Error: " + Environment.NewLine + ex);
                             }
                            
                         }
@@ -53,7 +60,7 @@ namespace PACKYZ2_TOOL
                             }
                             catch (Exception ex)
                             {
-                                Console.WriteLine("Error: " + ex);
+                                Console.WriteLine("Error: " + Environment.NewLine + ex);
                             }
                         }
                         else
@@ -72,11 +79,10 @@ namespace PACKYZ2_TOOL
             }
             else
             {
-                Console.WriteLine("Unspecified file directory.");
+                Console.WriteLine("File specified does not exist.");
             }
 
             Console.WriteLine("Finished!!!");
-            Console.WriteLine("");
         }
     }
 }

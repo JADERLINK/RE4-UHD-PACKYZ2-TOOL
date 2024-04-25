@@ -63,14 +63,20 @@ namespace PACKYZ2_TOOL
                     {
                         Extension = "dds";
                     }
-                    else 
+                    else
                     {
                         Extension = "tga";
                     }
 
-                    File.WriteAllBytes(baseDiretory + "\\" + PackID.ToString("x8") + "\\" + i.ToString("D4") + "." +Extension, imagebytes);
+                    File.WriteAllBytes(baseDiretory + "\\" + PackID.ToString("x8") + "\\" + i.ToString("D4") + "." + Extension, imagebytes);
                     Console.WriteLine("Extracted file: " + PackID.ToString("x8") + "\\" + i.ToString("D4") + "." + Extension);
                 }
+                else
+                {
+                    File.WriteAllText(baseDiretory + "\\" + PackID.ToString("x8") + "\\" + i.ToString("D4") + ".empty", "");
+                    Console.WriteLine("ID: " + i.ToString("D4") + " is empty");
+                }
+
             }
 
             pack.Close();

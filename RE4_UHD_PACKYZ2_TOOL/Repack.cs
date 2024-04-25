@@ -21,7 +21,7 @@ namespace PACKYZ2_TOOL
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error: " + ex);
+                Console.WriteLine("Error: " + Environment.NewLine + ex);
             }
 
             if (idx != null)
@@ -68,7 +68,7 @@ namespace PACKYZ2_TOOL
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("MAGIC tag error: " + ex);
+                        Console.WriteLine("MAGIC tag error: " + Environment.NewLine + ex);
                     }
                 }
                 else
@@ -92,7 +92,7 @@ namespace PACKYZ2_TOOL
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("Error: " + ex);
+                        Console.WriteLine("Error: " + Environment.NewLine + ex);
                     }
 
                     if (packFile != null)
@@ -102,10 +102,11 @@ namespace PACKYZ2_TOOL
 
                         while (asFile)
                         {
-                            string ddspatch = ImageFolder + "\\" + iCount.ToString("D4") + ".dds";
-                            string tgapatch = ImageFolder + "\\" + iCount.ToString("D4") + ".tga";
+                            string ddspath = ImageFolder + "\\" + iCount.ToString("D4") + ".dds";
+                            string tgapath = ImageFolder + "\\" + iCount.ToString("D4") + ".tga";
+                            string empty = ImageFolder + "\\" + iCount.ToString("D4") + ".empty";
 
-                            if (File.Exists(ddspatch) || File.Exists(tgapatch))
+                            if (File.Exists(ddspath) || File.Exists(tgapath) || File.Exists(empty))
                             {
                                 iCount++;
                             }
@@ -122,7 +123,7 @@ namespace PACKYZ2_TOOL
 
                         //header calculo
                         uint line = ((iCount + 2) * 4) / 16;
-                        float rest = ((iCount +2) * 4) % 16;
+                        float rest = ((iCount + 2) * 4) % 16;
                         if (rest != 0)
                         {
                             line++;
@@ -139,11 +140,6 @@ namespace PACKYZ2_TOOL
                             string ddspatch = ImageFolder + "\\" + i.ToString("D4") + ".dds";
                             string tgapatch = ImageFolder + "\\" + i.ToString("D4") + ".tga";
 
-                            packFile.BaseStream.Position = 8 + (i * 4);
-                            packFile.Write(nextOffset);
-
-                            packFile.BaseStream.Position = nextOffset;
-
                             FileInfo imageFile = null;
                             if (File.Exists(ddspatch))
                             {
@@ -154,33 +150,49 @@ namespace PACKYZ2_TOOL
                                 imageFile = new FileInfo(tgapatch);
                             }
 
-                            packFile.Write((uint)imageFile.Length);
-                            packFile.Write(0xFFFFFFFF);
-                            packFile.Write(magic);
-
-                            if (imageFile.Extension.ToUpperInvariant().Contains("DDS"))
+                            if (imageFile != null)
                             {
-                                packFile.Write((uint)1);
+
+                                packFile.BaseStream.Position = 8 + (i * 4);
+                                packFile.Write(nextOffset);
+
+                                packFile.BaseStream.Position = nextOffset;
+
+                                packFile.Write((uint)imageFile.Length);
+                                packFile.Write(0xFFFFFFFF);
+                                packFile.Write(magic);
+
+                                if (imageFile.Extension.ToUpperInvariant().Contains("DDS"))
+                                {
+                                    packFile.Write((uint)1);
+                                }
+                                else
+                                {
+                                    packFile.Write((uint)0);
+                                }
+
+                                var fileStream = imageFile.OpenRead();
+                                fileStream.CopyTo(packFile.BaseStream);
+
+                                uint _line = (uint)imageFile.Length / 16;
+                                float _rest = imageFile.Length % 16;
+                                if (_rest != 0)
+                                {
+                                    _line++;
+                                }
+                                _line++; // primeira linha header
+
+                                nextOffset += (_line * 16);
+
+                                Console.WriteLine("Add file: " + imageFile.Name);
                             }
                             else 
                             {
+                                packFile.BaseStream.Position = 8 + (i * 4);
                                 packFile.Write((uint)0);
+                                Console.WriteLine("ID: " + i.ToString("D4") + " is empty");
                             }
 
-                            var fileStream = imageFile.OpenRead();
-                            fileStream.CopyTo(packFile.BaseStream);
-
-                            uint _line = (uint)imageFile.Length / 16;
-                            float _rest = imageFile.Length % 16;
-                            if (_rest != 0)
-                            {
-                                _line++;
-                            }
-                            _line++; // primeira linha header
-
-                            nextOffset += (_line * 16);
-
-                            Console.WriteLine("Add file: " + imageFile.Name);
                         }
 
                     }
