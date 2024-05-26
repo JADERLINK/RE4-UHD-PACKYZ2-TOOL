@@ -173,16 +173,16 @@ namespace PACKYZ2_TOOL
 
                                 var fileStream = imageFile.OpenRead();
                                 fileStream.CopyTo(packFile.BaseStream);
+                                fileStream.Close();
 
-                                uint _line = (uint)imageFile.Length / 16;
-                                float _rest = imageFile.Length % 16;
-                                if (_rest != 0)
-                                {
-                                    _line++;
-                                }
-                                _line++; // primeira linha header
+                                //alinhamento
+                                uint aLine = (uint)packFile.BaseStream.Position / 16;
+                                uint aRest = (uint)packFile.BaseStream.Position % 16;
+                                aLine += aRest != 0 ? 1u : 0u;
+                                int aDif = (int)((aLine * 16) - packFile.BaseStream.Position);
+                                packFile.Write(new byte[aDif]);
 
-                                nextOffset += (_line * 16);
+                                nextOffset = (uint)packFile.BaseStream.Position;
 
                                 Console.WriteLine("Add file: " + imageFile.Name);
                             }
@@ -195,6 +195,7 @@ namespace PACKYZ2_TOOL
 
                         }
 
+                        packFile.Close();
                     }
 
                 }

@@ -12,7 +12,7 @@ namespace PACKYZ2_TOOL
         static void Main(string[] args)
         {
             Console.WriteLine("# JADERLINK PACKYZ2 TOOL");
-            Console.WriteLine("# VERSION 1.0.1");
+            Console.WriteLine("# VERSION 1.0.2 (2024-05-25)");
 
             if (args.Length == 0)
             {
