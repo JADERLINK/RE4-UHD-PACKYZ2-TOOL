@@ -39,37 +39,52 @@ namespace PACKYZ2_TOOL
                 offsets.Add(offset);
             }
 
+            // offset, id
+            Dictionary<uint, int> offsetVisiteds = new Dictionary<uint, int>();
+
             for (int i = 0; i < offsets.Count; i++)
             {
                 if (offsets[i] != 0)
                 {
-                    pack.BaseStream.Position = offsets[i];
-                    uint fileLength = pack.ReadUInt32();
-                    uint ff_ff_ff_ff = pack.ReadUInt32();
-                    uint PackID_ = pack.ReadUInt32();
-                    uint Type = pack.ReadUInt32();
-
-                    string Extension = "null";
-                    // in uhd
-                    // Type 1 == "dds"  //44445320
-                    // Type 0 == "tga"
-                    //if (Type == 1){Extension = "dds";}else if (Type == 0) {Extension = "tga";}
-
-                    byte[] imagebytes = new byte[fileLength];
-                    pack.BaseStream.Read(imagebytes, 0, (int)fileLength);
-
-                    uint imagemagic = BitConverter.ToUInt32(imagebytes, 0);
-                    if (imagemagic == 0x20534444)
+                    if (offsetVisiteds.ContainsKey(offsets[i]))
                     {
-                        Extension = "dds";
+                        int refId = offsetVisiteds[offsets[i]];
+
+                        File.WriteAllText(baseDiretory + "\\" + PackID.ToString("x8") + "\\" + i.ToString("D4") + ".reference", refId.ToString("D4"));
+                        Console.WriteLine("ID: " + i.ToString("D4") + " refers to the ID " + refId.ToString("D4"));
                     }
                     else
                     {
-                        Extension = "tga";
-                    }
+                        offsetVisiteds.Add(offsets[i], i);
 
-                    File.WriteAllBytes(baseDiretory + "\\" + PackID.ToString("x8") + "\\" + i.ToString("D4") + "." + Extension, imagebytes);
-                    Console.WriteLine("Extracted file: " + PackID.ToString("x8") + "\\" + i.ToString("D4") + "." + Extension);
+                        pack.BaseStream.Position = offsets[i];
+                        uint fileLength = pack.ReadUInt32();
+                        uint ff_ff_ff_ff = pack.ReadUInt32();
+                        uint PackID_ = pack.ReadUInt32();
+                        uint Type = pack.ReadUInt32();
+
+                        string Extension = "null";
+                        // in uhd
+                        // Type 1 == "dds"  //44445320
+                        // Type 0 == "tga"
+                        //if (Type == 1){Extension = "dds";}else if (Type == 0) {Extension = "tga";}
+
+                        byte[] imagebytes = new byte[fileLength];
+                        pack.BaseStream.Read(imagebytes, 0, (int)fileLength);
+
+                        uint imagemagic = BitConverter.ToUInt32(imagebytes, 0);
+                        if (imagemagic == 0x20534444)
+                        {
+                            Extension = "dds";
+                        }
+                        else
+                        {
+                            Extension = "tga";
+                        }
+
+                        File.WriteAllBytes(baseDiretory + "\\" + PackID.ToString("x8") + "\\" + i.ToString("D4") + "." + Extension, imagebytes);
+                        Console.WriteLine("Extracted file: " + PackID.ToString("x8") + "\\" + i.ToString("D4") + "." + Extension);
+                    }
                 }
                 else
                 {

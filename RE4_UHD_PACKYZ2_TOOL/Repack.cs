@@ -17,7 +17,7 @@ namespace PACKYZ2_TOOL
 
             try
             {
-                idx = new FileInfo(file).OpenText();
+                idx = fileInfo.OpenText();
             }
             catch (Exception ex)
             {
@@ -105,8 +105,9 @@ namespace PACKYZ2_TOOL
                             string ddspath = ImageFolder + "\\" + iCount.ToString("D4") + ".dds";
                             string tgapath = ImageFolder + "\\" + iCount.ToString("D4") + ".tga";
                             string empty = ImageFolder + "\\" + iCount.ToString("D4") + ".empty";
+                            string reference = ImageFolder + "\\" + iCount.ToString("D4") + ".reference";
 
-                            if (File.Exists(ddspath) || File.Exists(tgapath) || File.Exists(empty))
+                            if (File.Exists(ddspath) || File.Exists(tgapath) || File.Exists(empty) || File.Exists(reference))
                             {
                                 iCount++;
                             }
@@ -135,6 +136,9 @@ namespace PACKYZ2_TOOL
 
                         uint nextOffset = line * 16;
 
+                        //id, offset
+                        Dictionary<int, uint> offsetVisiteds = new Dictionary<int, uint>();
+
                         for (int i = 0; i < iCount; i++)
                         {
                             string ddspatch = ImageFolder + "\\" + i.ToString("D4") + ".dds";
@@ -152,6 +156,7 @@ namespace PACKYZ2_TOOL
 
                             if (imageFile != null)
                             {
+                                offsetVisiteds.Add(i, nextOffset);
 
                                 packFile.BaseStream.Position = 8 + (i * 4);
                                 packFile.Write(nextOffset);
@@ -188,9 +193,34 @@ namespace PACKYZ2_TOOL
                             }
                             else 
                             {
+                                int Id = 0;
+                                uint Offset = 0;
+
+                                string reference = ImageFolder + "\\" + i.ToString("D4") + ".reference";
+                                if (File.Exists(reference))
+                                {
+                                    string cont = ReturnValidDecValue(File.ReadAllText(reference));
+                                    if (int.TryParse(cont, out Id))
+                                    {
+                                        if (offsetVisiteds.ContainsKey(Id))
+                                        {
+                                            Offset = offsetVisiteds[Id];
+                                        }
+                                    } 
+                                }
+
                                 packFile.BaseStream.Position = 8 + (i * 4);
-                                packFile.Write((uint)0);
-                                Console.WriteLine("ID: " + i.ToString("D4") + " is empty");
+                                packFile.Write(Offset);
+
+                                if (Offset != 0)
+                                {
+                                    Console.WriteLine("ID: " + i.ToString("D4") + " references the ID " + Id.ToString("D4"));
+                                }
+                                else 
+                                {
+                                    Console.WriteLine("ID: " + i.ToString("D4") + " is empty");
+                                }
+                               
                             }
 
                         }
@@ -222,6 +252,19 @@ namespace PACKYZ2_TOOL
                     || c == 'E'
                     || c == 'F'
                     )
+                {
+                    res += c;
+                }
+            }
+            return res;
+        }
+
+        private static string ReturnValidDecValue(string cont)
+        {
+            string res = "0";
+            foreach (var c in cont)
+            {
+                if (char.IsDigit(c))
                 {
                     res += c;
                 }

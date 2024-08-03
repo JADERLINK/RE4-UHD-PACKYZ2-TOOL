@@ -12,7 +12,8 @@ namespace PACKYZ2_TOOL
         static void Main(string[] args)
         {
             Console.WriteLine("# JADERLINK PACKYZ2 TOOL");
-            Console.WriteLine("# VERSION 1.0.2 (2024-05-25)");
+            Console.WriteLine("# VERSION 1.0.3 (2024-08-02)");
+            Console.WriteLine("# youtube.com/@JADERLINK");
 
             if (args.Length == 0)
             {
@@ -37,41 +38,34 @@ namespace PACKYZ2_TOOL
                 if (info != null)
                 {
                     Console.WriteLine("File: " + info.Name);
-                    if (info.Exists)
+
+                    if (info.Extension.ToUpperInvariant() == ".PACK"
+                     || info.Extension.ToUpperInvariant() == ".YZ2")
                     {
-                        if (info.Extension.ToUpperInvariant() == ".PACK"
-                         || info.Extension.ToUpperInvariant() == ".YZ2")
-                        {     
-                            try
-                            {
-                                Extract.ExtractFile(file);
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine("Error: " + Environment.NewLine + ex);
-                            }
-                           
-                        }
-                        else if (info.Extension.ToUpperInvariant() == ".IDXPACK")
+                        try
                         {
-                            try
-                            {
-                                Repack.RepackFile(file);
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine("Error: " + Environment.NewLine + ex);
-                            }
+                            Extract.ExtractFile(file);
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            Console.WriteLine("The extension is not valid: " + info.Extension);
+                            Console.WriteLine("Error: " + Environment.NewLine + ex);
                         }
 
                     }
+                    else if (info.Extension.ToUpperInvariant() == ".IDXPACK")
+                    {
+                        try
+                        {
+                            Repack.RepackFile(file);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Error: " + Environment.NewLine + ex);
+                        }
+                    }
                     else
                     {
-                        Console.WriteLine("File specified does not exist.");
+                        Console.WriteLine("The extension is not valid: " + info.Extension);
                     }
 
                 }
