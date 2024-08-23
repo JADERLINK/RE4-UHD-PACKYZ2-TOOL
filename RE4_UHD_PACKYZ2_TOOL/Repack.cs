@@ -26,59 +26,52 @@ namespace PACKYZ2_TOOL
 
             if (idx != null)
             {
-
-                Dictionary<string, string> pair = new Dictionary<string, string>();
-
-                List<string> lines = new List<string>();
+                uint magic = 0;
 
                 string endLine = "";
                 while (endLine != null)
                 {
                     endLine = idx.ReadLine();
-                    lines.Add(endLine);
+                    if (endLine != null)
+                    {
+                        string trim = endLine.ToUpperInvariant().Trim();
+                        if (!(trim.StartsWith(":") || trim.StartsWith("#") || trim.StartsWith("/") || trim.StartsWith("\\")))
+                        {
+                            var split = trim.Split(new char[] { ':' });
+                            if (split.Length >= 2)
+                            {
+                                string key = split[0].Trim();
+                                if (key.StartsWith("MAGIC"))
+                                {
+                                    string value = split[1].Trim();
+                                    try
+                                    {
+                                        magic = uint.Parse(ReturnValidHexValue(value), System.Globalization.NumberStyles.HexNumber, System.Globalization.CultureInfo.InvariantCulture);
+                                    }
+                                    catch (Exception)
+                                    {
+                                    }
+                                }
+                            }
+
+                        }
+
+                    }
+
                 }
 
                 idx.Close();
 
-                foreach (var item in lines)
+                if (magic == 0)
                 {
-                    if (item != null)
-                    {
-                        var split = item.Split(new char[] { ':' });
-                        if (split.Length >= 2)
-                        {
-                            string key = split[0].ToUpper().Trim();
-                            if (!pair.ContainsKey(key))
-                            {
-                                pair.Add(key, split[1].Trim());
-                            }
-                        }
-                    }
-                }
-
-                //=====
-
-                uint magic = 0;
-
-                if (pair.ContainsKey("MAGIC"))
-                {
-                    try
-                    {
-                        magic = uint.Parse(ReturnValidHexValue(pair["MAGIC"].ToUpper()), System.Globalization.NumberStyles.HexNumber);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("MAGIC tag error: " + Environment.NewLine + ex);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("MAGIC tag does not exist.");
+                    Console.WriteLine("=============================");
+                    Console.WriteLine("========INVALID MAGIC========");
+                    Console.WriteLine("=============================");
                 }
 
                 Console.WriteLine("Magic: " + magic.ToString("X8"));
 
-                string ImageFolder = DirectoryName + "\\" + magic.ToString("x8");
+                string ImageFolder = Path.Combine(DirectoryName, magic.ToString("x8"));
 
                 if (Directory.Exists(ImageFolder))
                 {
@@ -87,7 +80,10 @@ namespace PACKYZ2_TOOL
 
                     try
                     {
-                        FileInfo packFileInfo = new FileInfo(fileInfo.FullName.Substring(0, fileInfo.FullName.Length - fileInfo.Extension.Length));
+                        string packName = Path.GetFileNameWithoutExtension(fileInfo.Name);
+                        packName = packName.Length > 0 ? packName : "NoName.pack";
+
+                        FileInfo packFileInfo = new FileInfo(Path.Combine(DirectoryName, packName));
                         packFile = new BinaryWriter(packFileInfo.Create());
                     }
                     catch (Exception ex)
@@ -102,10 +98,10 @@ namespace PACKYZ2_TOOL
 
                         while (asFile)
                         {
-                            string ddspath = ImageFolder + "\\" + iCount.ToString("D4") + ".dds";
-                            string tgapath = ImageFolder + "\\" + iCount.ToString("D4") + ".tga";
-                            string empty = ImageFolder + "\\" + iCount.ToString("D4") + ".empty";
-                            string reference = ImageFolder + "\\" + iCount.ToString("D4") + ".reference";
+                            string ddspath = Path.Combine(ImageFolder, iCount.ToString("D4") + ".dds");
+                            string tgapath = Path.Combine(ImageFolder, iCount.ToString("D4") + ".tga");
+                            string empty = Path.Combine(ImageFolder, iCount.ToString("D4") + ".empty");
+                            string reference = Path.Combine(ImageFolder, iCount.ToString("D4") + ".reference");
 
                             if (File.Exists(ddspath) || File.Exists(tgapath) || File.Exists(empty) || File.Exists(reference))
                             {
@@ -123,8 +119,9 @@ namespace PACKYZ2_TOOL
                         packFile.Write(iCount);
 
                         //header calculo
-                        uint line = ((iCount + 2) * 4) / 16;
-                        float rest = ((iCount + 2) * 4) % 16;
+                        uint headerLength = ((iCount + 2) * 4);
+                        uint line = headerLength / 16;
+                        uint rest = headerLength % 16;
                         if (rest != 0)
                         {
                             line++;
@@ -141,8 +138,8 @@ namespace PACKYZ2_TOOL
 
                         for (int i = 0; i < iCount; i++)
                         {
-                            string ddspatch = ImageFolder + "\\" + i.ToString("D4") + ".dds";
-                            string tgapatch = ImageFolder + "\\" + i.ToString("D4") + ".tga";
+                            string ddspatch = Path.Combine(ImageFolder, i.ToString("D4") + ".dds");
+                            string tgapatch = Path.Combine(ImageFolder, i.ToString("D4") + ".tga");
 
                             FileInfo imageFile = null;
                             if (File.Exists(ddspatch))
@@ -196,7 +193,7 @@ namespace PACKYZ2_TOOL
                                 int Id = 0;
                                 uint Offset = 0;
 
-                                string reference = ImageFolder + "\\" + i.ToString("D4") + ".reference";
+                                string reference = Path.Combine(ImageFolder, i.ToString("D4") + ".reference");
                                 if (File.Exists(reference))
                                 {
                                     string cont = ReturnValidDecValue(File.ReadAllText(reference));
@@ -231,7 +228,7 @@ namespace PACKYZ2_TOOL
                 }
                 else 
                 {
-                    Console.WriteLine($"The folder {magic.ToString("x8")} does not exist.");
+                    Console.WriteLine($"The folder {magic:x8} does not exist.");
                 }
 
             }
@@ -242,7 +239,7 @@ namespace PACKYZ2_TOOL
         private static string ReturnValidHexValue(string cont)
         {
             string res = "";
-            foreach (var c in cont)
+            foreach (var c in cont.ToUpperInvariant())
             {
                 if (char.IsDigit(c)
                     || c == 'A'

@@ -12,8 +12,9 @@ namespace PACKYZ2_TOOL
         static void Main(string[] args)
         {
             Console.WriteLine("# JADERLINK PACKYZ2 TOOL");
-            Console.WriteLine("# VERSION 1.0.3 (2024-08-02)");
+            Console.WriteLine("# By: JADERLINK");
             Console.WriteLine("# youtube.com/@JADERLINK");
+            Console.WriteLine("# VERSION 1.0.4 (2024-08-23)");
 
             if (args.Length == 0)
             {
@@ -24,12 +25,11 @@ namespace PACKYZ2_TOOL
             }
             else if (args.Length >= 1 && File.Exists(args[0]))
             {
-                string file = args[0];
                 FileInfo info = null;
 
                 try
                 {
-                    info = new FileInfo(file);
+                    info = new FileInfo(args[0]);
                 }
                 catch (Exception ex)
                 {
@@ -44,7 +44,7 @@ namespace PACKYZ2_TOOL
                     {
                         try
                         {
-                            Extract.ExtractFile(file);
+                            Extract.ExtractFile(info.FullName);
                         }
                         catch (Exception ex)
                         {
@@ -56,7 +56,7 @@ namespace PACKYZ2_TOOL
                     {
                         try
                         {
-                            Repack.RepackFile(file);
+                            Repack.RepackFile(info.FullName);
                         }
                         catch (Exception ex)
                         {

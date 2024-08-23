@@ -3,8 +3,11 @@ Extract and repack RE4 UHD .pack/.pack.yz2 files
 
 **Translate from Portuguese Brazil**
 
-Programa destinado a extrair e reempacotar arquivos .pack/pack.yz2
+Programa destinado a extrair e reempacotar arquivos .pack/pack.yz2 da versão de PC UHD 
 <br> Ao extrair será gerado um arquivo de extenção .idxpack, ele será usado para o repack.
+
+**update: 1.0.4**
+<br> Melhorias no código.
 
 **update: 1.0.3**
 <br>Adicionado suporte ao arquivo de formato ".reference", dentro dele vai ter o ID de uma textura anterior referenciada, serve para colocar a mesma textura em mais de um ID, ocupando o espaço em disco de um único arquivo de textura, porém na memória do jogo, vai ocupar o espaço de duas texturas.
@@ -35,4 +38,4 @@ A quantidade é definida pela numeração, (então não deixe imagens faltando n
 * O nome do arquivo gerado é o mesmo nome do idxpack, mas sem o .idxpack;
 
 **At.te: JADERLINK**
-<br>2024-08-02
+<br>2024-08-23
