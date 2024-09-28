@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace PACKYZ2_TOOL
+namespace RE4_UHD_PACKYZ2_TOOL
 {
-    public static class Repack
+    internal static class Repack
     {
-        public static void RepackFile(string file)
+        internal static void RepackFile(string file)
         {
             StreamReader idx = null;
             FileInfo fileInfo = new FileInfo(file);
@@ -35,7 +35,7 @@ namespace PACKYZ2_TOOL
                     if (endLine != null)
                     {
                         string trim = endLine.ToUpperInvariant().Trim();
-                        if (!(trim.StartsWith(":") || trim.StartsWith("#") || trim.StartsWith("/") || trim.StartsWith("\\")))
+                        if (! (trim.StartsWith(":") || trim.StartsWith("#") || trim.StartsWith("/") || trim.StartsWith("\\")))
                         {
                             var split = trim.Split(new char[] { ':' });
                             if (split.Length >= 2)
@@ -119,7 +119,7 @@ namespace PACKYZ2_TOOL
                         packFile.Write(iCount);
 
                         //header calculo
-                        uint headerLength = ((iCount + 2) * 4);
+                        uint headerLength = ((iCount + 2) * 4); //diferença entre as tools
                         uint line = headerLength / 16;
                         uint rest = headerLength % 16;
                         if (rest != 0)
@@ -206,7 +206,7 @@ namespace PACKYZ2_TOOL
                                     } 
                                 }
 
-                                packFile.BaseStream.Position = 8 + (i * 4);
+                                packFile.BaseStream.Position = 8 + (i * 4); //diferença entre as tools
                                 packFile.Write(Offset);
 
                                 if (Offset != 0)

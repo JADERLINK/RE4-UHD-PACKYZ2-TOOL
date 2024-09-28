@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace PACKYZ2_TOOL
+namespace RE4_UHD_PACKYZ2_TOOL
 {
-    public static class Extract
+    internal static class Extract
     {
-        public static void ExtractFile(string file)
+        internal static void ExtractFile(string file)
         {
             FileInfo fileInfo = new FileInfo(file);
             string baseName = fileInfo.Name;
@@ -26,7 +26,7 @@ namespace PACKYZ2_TOOL
             var idx = new FileInfo(Path.Combine(baseDiretory, baseName + ".idxpack")).CreateText();
             Directory.CreateDirectory(Path.Combine(baseDiretory, PackID.ToString("x8")));
 
-            idx.WriteLine("# JADERLINK PACKYZ2 TOOL");
+            idx.WriteLine("# RE4 UHD PACKYZ2 TOOL");
             idx.WriteLine("# By: JADERLINK");
             idx.WriteLine("# youtube.com/@JADERLINK");
             idx.WriteLine("MAGIC:" + PackID.ToString("X8"));

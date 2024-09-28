@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{F4B0D362-7814-4234-84B8-31D8941D338F}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>PACKYZ2_TOOL</RootNamespace>
-    <AssemblyName>JADERLINK_PACKYZ2_TOOL</AssemblyName>
+    <RootNamespace>RE4_UHD_PACKYZ2_TOOL</RootNamespace>
+    <AssemblyName>RE4_UHD_PACKYZ2_TOOL</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -25,18 +25,20 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>embedded</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup>
     <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>PACKYZ2_TOOL.Program</StartupObject>
+    <StartupObject>RE4_UHD_PACKYZ2_TOOL.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

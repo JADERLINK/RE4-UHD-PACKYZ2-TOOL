@@ -3,8 +3,11 @@ Extract and repack RE4 UHD .pack/.pack.yz2 files
 
 **Translate from Portuguese Brazil**
 
-Programa destinado a extrair e reempacotar arquivos .pack/pack.yz2 da versão de PC UHD 
+Programa destinado a extrair e reempacotar arquivos .pack/pack.yz2 da versão de PC UHD;
 <br> Ao extrair será gerado um arquivo de extenção .idxpack, ele será usado para o repack.
+
+**update: 1.0.6**
+<br>Agora, a tool aceita vários arquivos como parâmetro, assim, podendo extrair ou recompactar vários arquivos .pack;
 
 **update: 1.0.4**
 <br> Melhorias no código.
@@ -22,20 +25,20 @@ Programa destinado a extrair e reempacotar arquivos .pack/pack.yz2 da versão de
 ## Extract
 
 Exemplo:
-<br>JADERLINK_PACKYZ2_TOOL.exe "01000000.pack.yz2"
+<br>*RE4_UHD_PACKYZ2_TOOL.exe "01000000.pack.yz2"*
 
-* Ira gerar um arquivo de nome "01000000.pack.yz2.idxpack"
-* Ira criar uma pasta de nome "01000000"
-* Na pasta vão conter as texturas, nomeadas numericamente com 4 dígitos. Ex: 0000.dds
+* Vai gerar um arquivo de nome "01000000.pack.yz2.idxpack";
+* Vai criar uma pasta de nome "01000000";
+* Na pasta vão conter as texturas, nomeadas numericamente com 4 dígitos. Ex: 0000.dds;
 
 ## Repack
 
 Exemplo:
-<br>JADERLINK_PACKYZ2_TOOL.exe "01000000.pack.yz2.idxpack"
+<br>*RE4_UHD_PACKYZ2_TOOL.exe "01000000.pack.yz2.idxpack"*
 
-* Vai ler as imagens da pasta "01000000"
-A quantidade é definida pela numeração, (então não deixe imagens faltando no meio).
+* Vai ler as imagens da pasta "01000000";
+* A quantidade é definida pela numeração (então não deixe imagens faltando no meio);
 * O nome do arquivo gerado é o mesmo nome do idxpack, mas sem o .idxpack;
 
 **At.te: JADERLINK**
-<br>2024-08-23
+<br>2024-09-28

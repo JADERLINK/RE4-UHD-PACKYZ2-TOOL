@@ -5,16 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace PACKYZ2_TOOL
+namespace RE4_UHD_PACKYZ2_TOOL
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        internal static void Main(string[] args)
         {
-            Console.WriteLine("# JADERLINK PACKYZ2 TOOL");
+            System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+
+            Console.WriteLine("# RE4 UHD PACKYZ2 TOOL");
             Console.WriteLine("# By: JADERLINK");
             Console.WriteLine("# youtube.com/@JADERLINK");
-            Console.WriteLine("# VERSION 1.0.4 (2024-08-23)");
+            Console.WriteLine("# VERSION 1.0.6 (2024-09-28)");
 
             if (args.Length == 0)
             {
@@ -23,57 +25,64 @@ namespace PACKYZ2_TOOL
                 Console.WriteLine("Press any key to close the console.");
                 Console.ReadKey();
             }
-            else if (args.Length >= 1 && File.Exists(args[0]))
+            else
             {
-                FileInfo info = null;
-
-                try
+                for (int i = 0; i < args.Length; i++)
                 {
-                    info = new FileInfo(args[0]);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error in the path: " + Environment.NewLine + ex);
-                }
-                if (info != null)
-                {
-                    Console.WriteLine("File: " + info.Name);
-
-                    if (info.Extension.ToUpperInvariant() == ".PACK"
-                     || info.Extension.ToUpperInvariant() == ".YZ2")
+                    if (File.Exists(args[i]))
                     {
+                        FileInfo info = null;
+
                         try
                         {
-                            Extract.ExtractFile(info.FullName);
+                            info = new FileInfo(args[i]);
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine("Error: " + Environment.NewLine + ex);
+                            Console.WriteLine("Error in the path: " + Environment.NewLine + ex);
+                        }
+                        if (info != null)
+                        {
+                            Console.WriteLine("File: " + info.Name);
+
+                            if (info.Extension.ToUpperInvariant() == ".PACK"
+                             || info.Extension.ToUpperInvariant() == ".YZ2")
+                            {
+                                try
+                                {
+                                    Extract.ExtractFile(info.FullName);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Error: " + Environment.NewLine + ex);
+                                }
+
+                            }
+                            else if (info.Extension.ToUpperInvariant() == ".IDXPACK")
+                            {
+                                try
+                                {
+                                    Repack.RepackFile(info.FullName);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Error: " + Environment.NewLine + ex);
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("The extension is not valid: " + info.Extension);
+                            }
+
                         }
 
-                    }
-                    else if (info.Extension.ToUpperInvariant() == ".IDXPACK")
-                    {
-                        try
-                        {
-                            Repack.RepackFile(info.FullName);
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine("Error: " + Environment.NewLine + ex);
-                        }
                     }
                     else
                     {
-                        Console.WriteLine("The extension is not valid: " + info.Extension);
+                        Console.WriteLine("File specified does not exist: " + args[i]);
                     }
 
                 }
-   
-            }
-            else
-            {
-                Console.WriteLine("File specified does not exist.");
             }
 
             Console.WriteLine("Finished!!!");

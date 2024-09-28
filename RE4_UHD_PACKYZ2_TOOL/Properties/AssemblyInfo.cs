@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // As informações gerais sobre um assembly são controladas por
 // conjunto de atributos. Altere estes valores de atributo para modificar as informações
 // associadas a um assembly.
-[assembly: AssemblyTitle("JADERLINK PACKYZ2 TOOL")]
-[assembly: AssemblyDescription("JADERLINK PACKYZ2 TOOL")]
+[assembly: AssemblyTitle("RE4 UHD PACKYZ2 TOOL")]
+[assembly: AssemblyDescription("RE4 UHD PACKYZ2 TOOL by JADERLINK")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("JADERLINK")]
-[assembly: AssemblyProduct("JADERLINK PACKYZ2 TOOL")]
+[assembly: AssemblyProduct("RE4 UHD PACKYZ2 TOOL")]
 [assembly: AssemblyCopyright("Copyright ©JADERLINK 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
