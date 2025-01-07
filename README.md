@@ -6,6 +6,11 @@ Extract and repack RE4 UHD .pack/.pack.yz2 files
 Programa destinado a extrair e reempacotar arquivos .pack/pack.yz2 da versão de PC UHD;
 <br> Ao extrair será gerado um arquivo de extenção .idxpack, ele será usado para o repack.
 
+**update: 1.0.7**
+<br>Corrigido bug ao extrair arquivos de imagens com 0 de tamanho.
+<br>Agora, ao arrastar arquivos sobre o programa, ele vai ficar aberto após extrair/reempacotar.
+<br>Os arquivos bat funcionam iguais a antes, mas agora adicionei mais um parâmetro neles.
+
 **update: 1.0.6**
 <br>Agora, a tool aceita vários arquivos como parâmetro, assim, podendo extrair ou recompactar vários arquivos .pack;
 
@@ -41,4 +46,4 @@ Exemplo:
 * O nome do arquivo gerado é o mesmo nome do idxpack, mas sem o .idxpack;
 
 **At.te: JADERLINK**
-<br>2024-09-28
+<br>2025-01-07

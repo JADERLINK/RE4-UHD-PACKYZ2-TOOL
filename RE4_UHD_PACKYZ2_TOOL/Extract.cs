@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
+
 namespace RE4_UHD_PACKYZ2_TOOL
 {
     internal static class Extract
@@ -72,7 +73,14 @@ namespace RE4_UHD_PACKYZ2_TOOL
                         byte[] imagebytes = new byte[fileLength];
                         pack.BaseStream.Read(imagebytes, 0, (int)fileLength);
 
-                        uint imagemagic = BitConverter.ToUInt32(imagebytes, 0);
+                        uint imagemagic = 0;
+                        try
+                        {
+                            imagemagic = BitConverter.ToUInt32(imagebytes, 0);
+                        }
+                        catch (Exception)
+                        {
+                        }
 
                         string Extension = "error";
 
